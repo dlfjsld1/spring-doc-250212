@@ -7,10 +7,9 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-@OpenAPIDefinition(info = @Info(title = "API서버", version = "v1"))
+@OpenAPIDefinition(info = @Info(title = "API 서버", version = "v1"))
 public class SpringDocConfig {
-
-    // API 버전 v1에 해당하는 경로(/api/v1/**)를 그룹화하여 Swagger 문서에 표시
+    // api/v1/** 로 시작하는 url들은 apiV1 그룹으로 묶어서 보여준다.
     @Bean
     public GroupedOpenApi groupApiV1() {
         return GroupedOpenApi.builder()
@@ -18,13 +17,12 @@ public class SpringDocConfig {
                 .pathsToMatch("/api/v1/**")
                 .build();
     }
-
-    // 모든 경로(/**)를 그룹화하여 Swagger 문서에 표시
+    // api/v2/** 로 시작하는 url들은 controller 그룹으로 묶어서 보여준다.
     @Bean
     public GroupedOpenApi groupController() {
         return GroupedOpenApi.builder()
                 .group("controller")
-                .pathsToMatch("/**")
+                .pathsToExclude("/api/**")
                 .build();
     }
 }
