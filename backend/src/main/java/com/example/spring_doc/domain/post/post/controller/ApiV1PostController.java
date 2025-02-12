@@ -68,7 +68,7 @@ public class ApiV1PostController {
             @RequestParam(defaultValue = "3")
             int pageSize,
             @RequestParam(defaultValue = "title")
-            String keywordType,
+            SearchKeywordType keywordType,
             @RequestParam(defaultValue = "")
             String keyword
     ) {
@@ -93,7 +93,7 @@ public class ApiV1PostController {
             @RequestParam(defaultValue = "3")
             int pageSize,
             @RequestParam(defaultValue = "title")
-            String keywordType,
+            SearchKeywordType keywordType,
             @RequestParam(defaultValue = "")
             String keyword
     ) {

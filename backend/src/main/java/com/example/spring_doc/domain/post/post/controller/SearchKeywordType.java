@@ -1,4 +1,13 @@
 package com.example.spring_doc.domain.post.post.controller;
 
-public class SearchKeywordType {
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+
+@AllArgsConstructor
+@Getter
+public enum SearchKeywordType {
+    TITLE("title"),
+    CONTENT("content");
+
+    private final String value;
 }
