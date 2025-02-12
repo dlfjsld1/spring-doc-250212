@@ -1,0 +1,35 @@
+package com.example.spring_doc.global.security;
+
+import com.example.spring_doc.domain.member.member.entity.Member;
+import com.example.spring_doc.domain.member.member.repository.MemberRepository;
+import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.stereotype.Service;
+
+//이 코드의 역할은 스프링 시큐리티가 제공하는 UserDetailsService 인터페이스를 구현하여,
+// 사용자 정보를 데이터베이스에서 가져오는 로직을 정의하는 것.
+// CustomUserDetailService의 역할은 사용자 이름(username)을 기반으로
+// 데이터베이스에서 사용자 정보를 조회하고,
+// 그 정보를 스프링 시큐리티가 이해할 수 있는 UserDetails 객체로 변환하여 반환하는 것.
+// * 아이디와 비밀번호를 입력하는 form 로그인을 할 때만 실행된다.
+// * apiKey, jwt 같은 인증방식은 시큐리티를 지원하지 않아 이 코드를 사용하지 않게 된다.
+// * 다만 인가 체크를 할 때는 유용하므로 테스트에 쓸 수 있다.
+@Service
+@RequiredArgsConstructor
+public class CustomUserDetailService implements UserDetailsService {
+
+    private final MemberRepository memberRepository;
+
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+
+        Member member = memberRepository.findByUsername(username)
+                .orElseThrow(() -> new UsernameNotFoundException("사용자를 찾을 수 없습니다."));
+
+
+        // id, username, password, authorities
+        return new SecurityUser(member.getId(), member.getUsername(), member.getPassword(), member.getAuthorities());
+    }
+}
