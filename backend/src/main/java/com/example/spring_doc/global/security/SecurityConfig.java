@@ -27,21 +27,20 @@ public class SecurityConfig {
                                 .requestMatchers("/h2-console/**")
                                 .permitAll()
                                 .requestMatchers(HttpMethod.GET, "/api/*/posts/{id:\\d+}", "/api/*/posts", "/api/*/posts/{postId:\\d+}/comments")
-                                .permitAll() //이 위에 지정한건 허용하고
+                                .permitAll()
                                 .requestMatchers("/api/*/members/login", "/api/*/members/join", "/api/*/members/logout")
                                 .permitAll()
                                 .requestMatchers("/api/v1/posts/statistics")
                                 .hasRole("ADMIN")
+                                .requestMatchers("/swagger-ui/**", "/v3/api-docs/**")
+                                .permitAll()
                                 .anyRequest()
-                                .authenticated() // 나머지는 막아라
+                                .authenticated()
                 )
                 .headers((headers) -> headers
                         .addHeaderWriter(new XFrameOptionsHeaderWriter(
                                 XFrameOptionsHeaderWriter.XFrameOptionsMode.SAMEORIGIN)))
-                // csrf 끄기. api 서버는 csrf 끄는게 일반적
-                .csrf((csrf) -> csrf.disable())
-                //기본 필터 전 후에 addFilterBefore addFilterAfter로 붙일 수 있음
-                //UsernamePasswordAuthenticationFilter는 기본 필터.
+                .csrf(csrf -> csrf.disable())
                 .addFilterBefore(customAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .exceptionHandling(
                         exceptionHandling -> exceptionHandling
@@ -67,6 +66,7 @@ public class SecurityConfig {
                                             );
                                         }
                                 )
+
                 );
         ;
         return http.build();
